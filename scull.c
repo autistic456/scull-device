@@ -26,7 +26,7 @@ MODULE_LICENSE("Dual BSD/GPL");
 
 static struct file_operations scull_fops = {
 	.owner = THIS_MODULE,
-	.open = scull_open,	
+	.open = scull_open,	/** comment later **/
 	.read = scull_read,
 	.write = scull_write,
 	.release = scull_release,
@@ -39,7 +39,7 @@ int scull_init_module(void) {
 	int result = 1;
 	result = alloc_chrdev_region(&dev, scull_minor, scull_nr_devs, "scull"); /**comment later**/
 	scull_major = MAJOR(dev);
-	printk(KERN_ALERT"Passed %s %d \n in scull_init_module\n", __FUNCTION__, __LINE__);
+	printk(KERN_ALERT"Passed %s %d \n", __FUNCTION__, __LINE__);
 	if(result < 0){
 		printk(KERN_WARNING "scull: can't get major %d\n", scull_major);
 		return result;
@@ -51,6 +51,7 @@ int scull_init_module(void) {
 		result = -1;
 		goto fail;
 	}
+	memset(scull_devices, 0, scull_nr_devs *sizeof(struct scull_dev));
 
 	/*initilization of devices */
 	for(i=0; i<scull_nr_devs;i++){
